@@ -1,0 +1,45 @@
+clear
+load('lab3data.mat')
+
+noise = 100 * ref;
+signal = voice + 100 * fref;
+
+N = length(signal);
+filterLength = 5;
+% 0.0000005
+mu = 0.0000005;
+delayed = zeros(1,filterLength);
+h = [1, 0, 0, 0, 0];
+error = zeros(1, N);
+ 
+ for k = 1:N
+     delayed(1) = noise(k);
+     
+     z =  delayed * h';
+     
+     error(k) = signal(k) - z;
+     h = h + mu * error(k) .* delayed;
+     delayed(2:filterLength) = delayed(1:filterLength-1);
+ end
+ 
+ plot(error)
+ 
+%  
+%  load('lab3data.mat')
+% 
+% % reference noise signal
+% noise = ref;
+% % voice signal + filtered reference noise signal
+% refer = voice + 100 * fref;
+% h = [1, 0, 0, 0, 0];
+% mu = 0.0000005;
+% 
+% e = zeros(1, length(d));
+% 
+% for n = 1:length(d)
+%     h(1) = d(n);
+%     
+%     e(n) = s(n) - h' * d(n);
+%     
+%     h(n + 1) = h(n) + mu * e(n) * d(n);
+% end
